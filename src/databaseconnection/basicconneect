@@ -1,0 +1,55 @@
+package databaseconnection;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.*;
+import java.util.Properties;
+
+public class ConnectDB {
+
+    //MySQL database
+    //Secret.propetereis file
+    //mySql Driver
+
+    //Secret.preoperty file
+    //jdbc driver
+    //jdbc url
+    //configure jdbc
+    //mysql queries
+
+    public static Connection connect = null;
+    public static Statement statement = null;
+    public static PreparedStatement ps = null;
+    public static ResultSet resultSet = null;
+
+
+
+    //load properties
+    public static Properties loadProperties() throws IOException {
+
+        Properties prop = new Properties();
+        InputStream ism = new FileInputStream("src/Secret.properties");
+        prop.load(ism);
+        ism.close();
+        return prop;
+    }
+
+    public static Connection connectToSqlDatabase() throws IOException, ClassNotFoundException, SQLException {
+        Properties prop = loadProperties();
+        // To load all the property from Properties file
+        String driverClass = prop.getProperty("MYSQLJDBC.driver");
+        String url = prop.getProperty("MYSQLJDBC.url");
+        String userName = prop.getProperty("MYSQLJDBC.userName");
+        String password = prop.getProperty("MYSQLJDBC.password");
+
+        Class.forName(driverClass);
+        connect = DriverManager.getConnection(url, userName, password);
+        System.out.println("Database is connected baby");
+        return connect;
+    }
+
+    public static void main(String[] args) throws SQLException, IOException, ClassNotFoundException {
+        connectToSqlDatabase();
+    }
